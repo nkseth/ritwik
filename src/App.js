@@ -1,48 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
-import { useDispatch, useSelector } from './redux/store';
-import {  getdata } from './redux/slices/data';
-import { useEffect, useRef,useCallback } from 'react';
-
+import List from './Components/lsit'
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
+import Listobb from './Components/listobb';
 function App() {
-const dispatch=useDispatch()
-const state=useSelector((state)=>state.data)
-console.log(state)
-useEffect(()=>{
- dispatch(getdata())
-},[])
-
-const observer=useRef()
-const lastelement=useCallback(node=>{
-  if(observer.current) observer.current.disconnect();
-  observer.current=new IntersectionObserver(e=>{
-    if(e[0].isIntersecting){
-      dispatch(getdata())
-    }
-  })
-  if(node) observer.current.observe(node)
-})
 
   return (
-    <div style={{display: 'flex', width:'100vw',minHeight:'100vh',
+    <BrowserRouter>
+    <div style={{display: 'flex', maxWidth:'100vw',minHeight:'100vh',
     background:'lightgray',flexDirection:'column',
-    justifyContent:'center',alignItems: 'center'}}>
-     {
-       state.currentdata.map((item,index)=>{
-         if(state.currentdata.length===index+1){
-          return <div ref={lastelement} key={item.id}>
-          {item.email}
-       </div>
-         } else{
-          return <div  key={item.id}>
-          {item.email}
-       </div>
-         }
+    justifyContent:'center',alignItems: 'center',overflowX:'hidden'}}>
+    <Routes>
       
-       })
-     }
-    
+      <Route exact path="/list/:id" element={<Listobb />} />
+      <Route exact path="/" element={<List/>} />
+     
+     </Routes>
+
     </div>
+    </BrowserRouter>
   );
 }
 

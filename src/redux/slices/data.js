@@ -1,9 +1,11 @@
+/* eslint-disable array-callback-return */
 import { createSlice } from "@reduxjs/toolkit";
 import {data} from './datafile'
 const initialState={
     data:[...data],
     currentdata:[],
-    pagecount:0
+    pagecount:0,
+    currentobject:{}
 };
 
 const slice= createSlice({
@@ -14,7 +16,12 @@ const slice= createSlice({
             state.pagecount=action.payload
         },
         setcurrentdata(state,action){
+            
             state.currentdata=action.payload
+        },
+        setcurrentobject(state,action){
+          
+            state.currentobject=action.payload
         }
     }
 })
@@ -31,5 +38,21 @@ export const getdata=()=>{
         data.splice(50*pagecount)
        dispatch(slice.actions.setcurrentdata(data))
         dispatch(slice.actions.addpagecount(pagecount))
+    }
+}
+
+export const getsingledata=(id)=>{
+    return (dispatch,getState) => {
+        const  state=getState()
+ 
+        const data=[...state.data.data]
+        
+      data.map((item)=>{
+            if(String(item.id)===id){
+                dispatch(slice.actions.setcurrentobject(item))
+               
+            }
+      })
+      
     }
 }
